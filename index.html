@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="시계">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJgAAACYCAIAAACXoLd2AAACmUlEQVR4nO3cMU4CQRSA4cGYaGgMiY2JsfQmWnsFj+AFLLyAR/AK1nodezuinQUNMcsysG/ZeT//10lkeZmfwYBhZjeXF0X5nUw9gGIYEsKQEIaEMCSEISEMCWFICENCGBLCkBCGhDAkhCEhDAlhSAhDQhgSwpAQhoQwJIQhIQwJYUgIQ0IYEsKQEIaEMCTE6UjXvV7MR7pyp6/v5ZC755q20yz8a3UHXpR1eyxQrml7BL+0Trguezx6rmn7RYacdl12nSHXtFuFhWxhXVZqJsk1bY2YkO2sy0r/PLmmreTbD4iAkK09wVc2TZVr2nruSAhDQhgSwpAQhoQwJIQhIQwJYUgIQ0IYEsKQEIaEMCSEISEMCWFICENCGBLCkBCGhDAkhCEhDAkx1vcjG/H5+rD+493T+zRzjI+8I/9V7LwFAxvy7fl+p9uzY4bsr4VsCQxZ04nXEhjyOBkSwpAQhoQAhnx8+Qj5nVyAIcu2TryKhRqybK6FrFjAIUvXJ6vgz1oDzqJb/vyGjHLk5udnQ+5O3pFHxZAQAf+PvL1aDL/IGDrP0WzzwKQy+NRPdySEISEMCWFICENCGBLCkBCGhDAkhCEhDAlhSAhDQhgSwpAQhoQwJIQhIQwJYUgIQ0IYEsKQEIaEMCSEISEMCWFICENCGBLCkBCGhDAkhCEhDAlhSAhDQgSEHHgcxUg2TZVr2nruSIiYkK09zfvnyTVtpbAd2c7q1EySa9oakS+tLaxO/Qy5pt0q+G/ktKuz66PnmrZfwDGfnQ585NvARck1baexQurAfPsBYUgIQ0IYEsKQEIaEMCSEISEMCWFICENCGBLCkBCGhDAkhCEhDAlhSAhDQhgSwpAQhoQwJIQhIQwJYUgIQ0IYEuIPro90kIjhEm4AAAAASUVORK5CYII=">
+<title>시계</title>
+<style>
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden}
+body{background:#000;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-touch-callout:none;
+  font-family:"Apple SD Gothic Neo","Helvetica Neue",Arial,sans-serif;-webkit-transition:background-color 1.2s;transition:background-color 1.2s}
+#aura{position:fixed;left:0;top:0;width:100%;height:100%;overflow:hidden}
+.blob{position:absolute;width:110vw;height:110vw;border-radius:50%;-webkit-transition:opacity 1.2s;transition:opacity 1.2s}
+#b1{left:-45vw;top:-55vw;-webkit-animation:driftA 46s ease-in-out infinite alternate;animation:driftA 46s ease-in-out infinite alternate}
+#b2{right:-50vw;bottom:-60vw;-webkit-animation:driftB 58s ease-in-out infinite alternate;animation:driftB 58s ease-in-out infinite alternate}
+@-webkit-keyframes driftA{from{-webkit-transform:translate3d(0,0,0)}to{-webkit-transform:translate3d(18vw,12vw,0)}}
+@keyframes driftA{from{transform:translate3d(0,0,0)}to{transform:translate3d(18vw,12vw,0)}}
+@-webkit-keyframes driftB{from{-webkit-transform:translate3d(0,0,0)}to{-webkit-transform:translate3d(-16vw,-10vw,0)}}
+@keyframes driftB{from{transform:translate3d(0,0,0)}to{transform:translate3d(-16vw,-10vw,0)}}
+
+#stage{position:fixed;left:0;top:0;width:100%;height:100%}
+#wrap{position:absolute;left:50%;top:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);
+  -webkit-transition:-webkit-transform 3s ease-in-out;transition:transform 3s ease-in-out;text-align:center;white-space:nowrap}
+
+#clock{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-align:end;-webkit-align-items:flex-end;align-items:flex-end;
+  -webkit-box-pack:center;-webkit-justify-content:center;justify-content:center}
+.group{display:-webkit-box;display:-webkit-flex;display:flex}
+.card{position:relative;width:14vw;height:20vw;margin:0 .45vw;-webkit-perspective:55vw;perspective:55vw}
+.half,.leaf{position:absolute;left:0;width:100%;height:50%;overflow:hidden;-webkit-transition:background-color 1.2s;transition:background-color 1.2s}
+.top,.leaf-top{top:0;border-radius:1.5vw 1.5vw 0 0;-webkit-transform-origin:50% 100%;transform-origin:50% 100%}
+.bottom,.leaf-bottom{bottom:0;border-radius:0 0 1.5vw 1.5vw;-webkit-transform-origin:50% 0;transform-origin:50% 0}
+.num{position:absolute;left:0;width:100%;height:200%;line-height:20vw;font-size:17vw;text-align:center;
+  font-family:"AvenirNextCondensed-DemiBold","HelveticaNeue-CondensedBold","Avenir Next Condensed","Helvetica Neue",Arial,sans-serif;
+  -webkit-transition:color 1.2s;transition:color 1.2s}
+.top .num,.leaf-top .num{top:0}
+.bottom .num,.leaf-bottom .num{top:-100%}
+.leaf{z-index:3;visibility:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.hinge{position:absolute;left:0;right:0;top:50%;height:.3vw;margin-top:-.15vw;z-index:5}
+.card.flip .leaf-top{visibility:visible;-webkit-animation:flipTop .27s ease-in both;animation:flipTop .27s ease-in both}
+.card.flip .leaf-bottom{visibility:visible;-webkit-animation:flipBot .27s ease-out .27s both;animation:flipBot .27s ease-out .27s both}
+.card.flip .bottom .shade{opacity:1;-webkit-transition:opacity .27s;transition:opacity .27s}
+.shade{position:absolute;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.35);opacity:0;z-index:2}
+@-webkit-keyframes flipTop{from{-webkit-transform:rotateX(0deg)}to{-webkit-transform:rotateX(-90deg)}}
+@keyframes flipTop{from{transform:rotateX(0deg)}to{transform:rotateX(-90deg)}}
+@-webkit-keyframes flipBot{from{-webkit-transform:rotateX(90deg)}to{-webkit-transform:rotateX(0deg)}}
+@keyframes flipBot{from{transform:rotateX(90deg)}to{transform:rotateX(0deg)}}
+
+.small .card{width:6.6vw;height:9.4vw;margin:0 .3vw;-webkit-perspective:30vw;perspective:30vw}
+.small .num{line-height:9.4vw;font-size:8vw}
+.small .top,.small .leaf-top{border-radius:.9vw .9vw 0 0}
+.small .bottom,.small .leaf-bottom{border-radius:0 0 .9vw .9vw}
+.small .hinge{height:.2vw;margin-top:-.1vw}
+#g-s{margin-left:1.4vw}
+body.nosec #g-s{display:none}
+
+.colon{width:3.2vw;height:20vw;position:relative}
+.colon i{position:absolute;left:50%;width:1.5vw;height:1.5vw;margin-left:-.75vw;border-radius:50%;-webkit-transition:opacity .5s,background-color 1.2s;transition:opacity .5s,background-color 1.2s}
+.colon i:first-child{top:33%}
+.colon i:last-child{top:62%}
+.colon.off i{opacity:.25}
+
+#info{margin-top:3.2vw;font-size:2.5vw;letter-spacing:.05em;-webkit-transition:color 1.2s;transition:color 1.2s}
+#ampm{font-weight:600;margin-right:1.2vw}
+#day{margin:2.4vw auto 0;width:40vw;font-size:1.6vw;-webkit-transition:color 1.2s;transition:color 1.2s}
+#bar{height:.35vw;border-radius:.2vw;margin-top:1vw;overflow:hidden}
+#fill{height:100%;width:0;border-radius:.2vw;-webkit-transition:width 1s linear,background-color 1.2s;transition:width 1s linear,background-color 1.2s}
+#greet{float:left}
+#pct{float:right}
+.cf:after{content:"";display:table;clear:both}
+
+#dim{position:fixed;left:0;top:0;width:100%;height:100%;background:#000;opacity:0;pointer-events:none;z-index:20;-webkit-transition:opacity 4s;transition:opacity 4s}
+
+#ctl{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:2vw 0 3vw;text-align:center;
+  background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0));
+  -webkit-transform:translate3d(0,110%,0);transform:translate3d(0,110%,0);-webkit-transition:-webkit-transform .35s ease;transition:transform .35s ease}
+#ctl.show{-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}
+#ctl button{font:inherit;font-size:15px;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:22px;padding:11px 18px;margin:4px 5px;-webkit-appearance:none;outline:none}
+#ctl button:active{background:rgba(255,255,255,.3)}
+
+#toast{position:fixed;left:50%;top:9%;z-index:40;-webkit-transform:translate(-50%,-10px);transform:translate(-50%,-10px);
+  background:rgba(0,0,0,.6);color:#fff;font-size:16px;padding:10px 20px;border-radius:20px;opacity:0;pointer-events:none;
+  -webkit-transition:opacity .3s,-webkit-transform .3s;transition:opacity .3s,transform .3s}
+#toast.show{opacity:1;-webkit-transform:translate(-50%,0);transform:translate(-50%,0)}
+</style>
+<style id="themecss"></style>
+</head>
+<body class="t1">
+<div id="aura"><div class="blob" id="b1"></div><div class="blob" id="b2"></div></div>
+<div id="stage">
+  <div id="wrap">
+    <div id="clock">
+      <div class="group"><div class="card" id="h1"></div><div class="card" id="h2"></div></div>
+      <div class="colon" id="colon"><i></i><i></i></div>
+      <div class="group"><div class="card" id="m1"></div><div class="card" id="m2"></div></div>
+      <div class="group small" id="g-s"><div class="card" id="s1"></div><div class="card" id="s2"></div></div>
+    </div>
+    <div id="info"><span id="ampm"></span><span id="date"></span></div>
+    <div id="day">
+      <div class="cf"><span id="greet"></span><span id="pct"></span></div>
+      <div id="bar"><div id="fill"></div></div>
+    </div>
+  </div>
+</div>
+<div id="dim"></div>
+<div id="ctl">
+  <button data-act="theme" id="bt-theme"></button>
+  <button data-act="h24" id="bt-h24"></button>
+  <button data-act="secs" id="bt-secs"></button>
+  <button data-act="dim" id="bt-dim"></button>
+</div>
+<div id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // 테마: 이름, 배경, 카드, 카드 윗면, 숫자색, 글로우, 오라1, 오라2, 포인트, 보조글자, 경첩
+  var THEMES = [
+    { name: '심야',       bg: '#0f1a2e', card: '#1b2942', cardTop: '#25375a', digit: '#e9eff9', glow: 'none',
+      a1: [70, 110, 210], a2: [130, 80, 200], accent: '#86acff', sub: 'rgba(220,230,250,.6)', hinge: 'rgba(0,0,0,.55)' },
+    { name: '에스프레소', bg: '#1e140f', card: '#3a2519', cardTop: '#4b3123', digit: '#f2dbb8', glow: 'none',
+      a1: [205, 125, 60], a2: [130, 60, 35], accent: '#d9a35f', sub: 'rgba(242,219,184,.55)', hinge: 'rgba(0,0,0,.55)' },
+    { name: '말차',       bg: '#132019', card: '#22372a', cardTop: '#2d4737', digit: '#e1ebc9', glow: 'none',
+      a1: [120, 175, 90], a2: [50, 120, 100], accent: '#aacb7b', sub: 'rgba(225,235,201,.55)', hinge: 'rgba(0,0,0,.5)' },
+    { name: '네온',       bg: '#0a0614', card: '#181027', cardTop: '#211636', digit: '#ffd6f3',
+      glow: '0 0 1.2vw rgba(255,90,210,.9), 0 0 3vw rgba(255,60,190,.55)',
+      a1: [255, 60, 180], a2: [60, 120, 255], accent: '#ff6ad5', sub: 'rgba(255,200,240,.6)', hinge: 'rgba(0,0,0,.6)' },
+    { name: '화이트',     bg: '#e3e6eb', card: '#f7f8fa', cardTop: '#ffffff', digit: '#262a33', glow: 'none',
+      a1: [150, 175, 225], a2: [215, 190, 235], accent: '#4a6fd1', sub: 'rgba(38,42,51,.55)', hinge: 'rgba(0,0,0,.12)' },
+    { name: 'OLED 블랙',  bg: '#000000', card: '#131313', cardTop: '#191919', digit: '#9b9b9b', glow: 'none',
+      a1: null, a2: null, accent: '#4d4d4d', sub: 'rgba(160,160,160,.45)', hinge: 'rgba(0,0,0,.9)' }
+  ];
+
+  var S = { theme: 1, h24: true, secs: true, dim: true };
+  try {
+    var saved = JSON.parse(localStorage.getItem('flipclock') || 'null');
+    if (saved) { for (var k in saved) { if (saved.hasOwnProperty(k)) { S[k] = saved[k]; } } }
+  } catch (e) {}
+  if (!(S.theme >= 0 && S.theme < THEMES.length)) { S.theme = 1; }
+  function save() { try { localStorage.setItem('flipclock', JSON.stringify(S)); } catch (e) {} }
+
+  function $(id) { return document.getElementById(id); }
+  function rgba(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
+
+  // 테마 CSS 생성 (iOS 9 호환을 위해 CSS 변수 대신 규칙을 직접 만듦)
+  (function buildThemeCSS() {
+    var css = '';
+    for (var i = 0; i < THEMES.length; i++) {
+      var t = THEMES[i], p = 'body.t' + i + ' ';
+      css += 'body.t' + i + '{background-color:' + t.bg + '}';
+      css += p + '.half,' + p + '.leaf{background-color:' + t.card + '}';
+      css += p + '.top,' + p + '.leaf-top{background-image:linear-gradient(to bottom,' + t.cardTop + ',' + t.card + ')}';
+      css += p + '.num{color:' + t.digit + ';text-shadow:' + t.glow + '}';
+      css += p + '.hinge{background:' + t.hinge + '}';
+      css += p + '.colon i,' + p + '#fill{background-color:' + t.accent + '}';
+      css += p + '#bar{background:' + rgba([128, 128, 128], .18) + '}';
+      css += p + '#info,' + p + '#day{color:' + t.sub + '}';
+      if (t.a1) {
+        css += p + '#b1{opacity:1;background:radial-gradient(circle,' + rgba(t.a1, .38) + ' 0%,' + rgba(t.a1, 0) + ' 68%)}';
+        css += p + '#b2{opacity:1;background:radial-gradient(circle,' + rgba(t.a2, .32) + ' 0%,' + rgba(t.a2, 0) + ' 68%)}';
+      } else {
+        css += p + '.blob{opacity:0}';
+      }
+    }
+    $('themecss').textContent = css;
+  })();
+
+  // 플립 카드 구성
+  var IDS = ['h1', 'h2', 'm1', 'm2', 's1', 's2'];
+  var cards = {};
+  for (var n = 0; n < IDS.length; n++) {
+    var el = $(IDS[n]);
+    el.innerHTML =
+      '<div class="half top"><div class="num"></div></div>' +
+      '<div class="half bottom"><div class="num"></div><div class="shade"></div></div>' +
+      '<div class="leaf leaf-top"><div class="num"></div></div>' +
+      '<div class="leaf leaf-bottom"><div class="num"></div></div>' +
+      '<div class="hinge"></div>';
+    var nums = el.getElementsByClassName('num');
+    cards[IDS[n]] = { el: el, top: nums[0], bottom: nums[1], lt: nums[2], lb: nums[3], val: null, timer: null };
+  }
+
+  function setCard(c, v, animate) {
+    if (c.val === v) { return; }
+    var old = c.val;
+    c.val = v;
+    if (!animate || old === null) {
+      c.top.textContent = c.bottom.textContent = c.lt.textContent = c.lb.textContent = v;
+      return;
+    }
+    clearTimeout(c.timer);
+    c.el.className = 'card';
+    void c.el.offsetWidth; // 애니메이션 재시작
+    c.top.textContent = v;
+    c.bottom.textContent = old;
+    c.lt.textContent = old;
+    c.lb.textContent = v;
+    c.el.className = 'card flip';
+    c.timer = setTimeout(function () {
+      c.bottom.textContent = v;
+      c.lt.textContent = v;
+      c.el.className = 'card';
+    }, 600);
+  }
+
+  function pad(x) { return x < 10 ? '0' + x : '' + x; }
+  var WEEK = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+
+  function greeting(h) {
+    if (h >= 5 && h < 11) { return '좋은 아침이에요'; }
+    if (h >= 11 && h < 14) { return '점심 맛있게 드세요'; }
+    if (h >= 14 && h < 18) { return '오후도 힘내세요'; }
+    if (h >= 18 && h < 22) { return '편안한 저녁 보내세요'; }
+    return '늦은 밤이에요, 푹 쉬세요';
+  }
+
+  var first = true, lastMin = -1, lastDate = '';
+  function render() {
+    var d = new Date();
+    var h = d.getHours(), m = d.getMinutes(), s = d.getSeconds();
+    var dh = S.h24 ? h : (h % 12 || 12);
+    var hs = pad(dh), ms = pad(m), ss = pad(s);
+    var anim = !first;
+
+    setCard(cards.h1, hs.charAt(0), anim);
+    setCard(cards.h2, hs.charAt(1), anim);
+    setCard(cards.m1, ms.charAt(0), anim);
+    setCard(cards.m2, ms.charAt(1), anim);
+    if (S.secs) {
+      setCard(cards.s1, ss.charAt(0), anim);
+      setCard(cards.s2, ss.charAt(1), anim);
+    }
+
+    $('colon').className = (s % 2) ? 'colon off' : 'colon';
+    $('ampm').textContent = S.h24 ? '' : (h < 12 ? '오전' : '오후');
+
+    var ds = d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + WEEK[d.getDay()];
+    if (ds !== lastDate) { $('date').textContent = ds; lastDate = ds; }
+
+    if (m !== lastMin) {
+      lastMin = m;
+      $('greet').textContent = greeting(h);
+      // 번인 방지: 1분마다 화면 전체를 몇 픽셀씩 이동
+      if (!first) {
+        var dx = Math.round(Math.random() * 16 - 8), dy = Math.round(Math.random() * 12 - 6);
+        var tf = 'translate(-50%,-50%) translate(' + dx + 'px,' + dy + 'px)';
+        $('wrap').style.webkitTransform = tf;
+        $('wrap').style.transform = tf;
+      }
+      var night = (h >= 23 || h < 6);
+      $('dim').style.opacity = (S.dim && night) ? '0.55' : '0';
+    }
+
+    var p = (h * 3600 + m * 60 + s) / 86400;
+    $('fill').style.width = (p * 100).toFixed(2) + '%';
+    $('pct').textContent = '오늘의 ' + Math.floor(p * 100) + '%';
+
+    first = false;
+  }
+
+  function loop() {
+    render();
+    setTimeout(loop, 1000 - (Date.now() % 1000) + 15);
+  }
+
+  // 설정 적용
+  function applyBody() {
+    document.body.className = 't' + S.theme + (S.secs ? '' : ' nosec');
+  }
+  function labels() {
+    $('bt-theme').textContent = '테마: ' + THEMES[S.theme].name;
+    $('bt-h24').textContent = S.h24 ? '24시간제' : '12시간제';
+    $('bt-secs').textContent = S.secs ? '초 표시 켬' : '초 표시 끔';
+    $('bt-dim').textContent = S.dim ? '야간 감광 켬' : '야간 감광 끔';
+  }
+
+  var toastTimer = null;
+  function toast(msg, ms) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.className = 'show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.className = ''; }, ms || 1600);
+  }
+
+  var ctlTimer = null;
+  function showCtl() {
+    $('ctl').className = 'show';
+    clearTimeout(ctlTimer);
+    ctlTimer = setTimeout(hideCtl, 5000);
+  }
+  function hideCtl() { $('ctl').className = ''; }
+
+  $('stage').addEventListener('click', function () {
+    if ($('ctl').className === 'show') { hideCtl(); } else { showCtl(); }
+  }, false);
+
+  $('ctl').addEventListener('click', function (e) {
+    e.stopPropagation();
+    var act = e.target.getAttribute && e.target.getAttribute('data-act');
+    if (!act) { return; }
+    if (act === 'theme') { S.theme = (S.theme + 1) % THEMES.length; toast(THEMES[S.theme].name); }
+    if (act === 'h24') { S.h24 = !S.h24; }
+    if (act === 'secs') {
+      S.secs = !S.secs;
+      cards.s1.val = cards.s2.val = null; // 다시 켤 때 즉시 표시
+    }
+    if (act === 'dim') { S.dim = !S.dim; lastMin = -1; }
+    save(); applyBody(); labels();
+    first = true; render();
+    showCtl();
+  }, false);
+
+  // 스크롤 바운스 방지
+  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+  applyBody();
+  labels();
+  loop();
+
+  if (!window.navigator.standalone) {
+    setTimeout(function () { toast('공유 버튼 → 홈 화면에 추가하면 전체화면으로 실행돼요', 6000); }, 1200);
+  }
+})();
+</script>
+</body>
+</html>
